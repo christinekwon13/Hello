@@ -1,0 +1,297 @@
+With final_data as (
+With weighted_tokens as (
+With tokens as
+(
+With sales_tokens as (
+With base as (
+SELECT
+merchant_token
+, date_won
+, rank() over (partition by merchant_token order by date_won) AS rank
+FROM(
+(SELECT
+  du.merchant_token as merchant_token
+, cd.close_date AS date_won
+FROM app_sales.sales_comp.closed_deals cd
+JOIN app_sales.app_sales_etl.sfdc_square_accounts sa
+ON sa.sf_object_id = cd.opportunity_id
+JOIN app_bi.pentagon.dim_user du
+ON du.user_token = sa.user_token
+--AND du.is_unit = 1
+LEFT JOIN app_sales.app_sales_etl.raw_bof bof
+ON du.merchant_token = bof.merchant_token
+LEFT JOIN app_sales.app_sales_etl.vw_fact_profit_oppty_historicals h
+ON du.merchant_token = h.merchant_token
+WHERE cd.sales_team IN ('Sales - MM', 'Sales - Retail', 'Sales - CA', 'Sales - Rest', 'Sales - UK', 'Sales - SMB', 'Sales - ENT', 'Sales - AU','Sales - JP')
+)
+UNION
+(
+SELECT
+  cd.merchant_token as merchant_token
+, cd.merchant_anchor_date AS date_won
+FROM app_sales.sales_comp.closed_deals_amc cd
+LEFT JOIN app_sales.app_sales_etl.raw_bof_amc bof_amc
+on cd.merchant_token = bof_amc.merchant_token
+LEFT JOIN app_sales.app_salesforce.opportunity_revenue_stats_amc rev
+on cd.merchant_token = rev.merchant_token
+WHERE cd.sales_team IN ('Sales - MM', 'Sales - Retail', 'Sales - CA', 'Sales - Rest', 'Sales - UK', 'Sales - SMB', 'Sales - ENT', 'Sales - AU','Sales - JP')
+)
+)
+)
+Select *
+From base
+where rank=1
+and merchant_token in (
+'ML5XHZAKJ8QBH'
+,'MLBV78R5QD1XF'
+,'MLQ8K3CHSZ6GJ'
+,'90FDF43PFMK3R'
+,'MLJBE7XW3F8B2'
+,'ML02XPJG20ZYX'
+,'ML6KB049ERVKX'
+,'MLBXJW7JMTVPM'
+,'ML74RYSWWDEMF'
+,'MLDM81BRWPHZ7'
+,'MLRR01KC3ZF9T'
+,'MLPE30JEEDQ13'
+,'MLAT5GYPH0QW6'
+,'MLAK75E4AMK56'
+,'MLW8MM0MF4KPX'
+,'ML420QC9K8XZ8'
+,'ML3G3HV1B1MGK'
+,'3DP9RXB3PNMPH'
+,'92MBKAW1BVZPN'
+,'4DMQ3D7PA577A'
+,'ML1NE97PK5RHP'
+,'ML66RAYHP278B'
+,'ML2JEBBQPPZV6'
+,'ML7PJSXXJBW7J'
+,'MLX1F2H8CG90R'
+,'MLFHRCR90BZBG'
+,'ZX1X1W48APE9Q'
+,'ML7RDS5DK910E'
+,'J0MS3A067G5D2'
+,'ZZQGEN136R7YS'
+,'MLWM5DM9VNJFR'
+,'ML0WMDTHJXKVG'
+,'AN6X1AF78TQCE'
+,'964JJX91E51AJ'
+,'ML7YYRJQCNA5F'
+,'ML2BSX0TMT6H5'
+,'ML9HWC5K5BHFM'
+,'MLWFRRQWRXJ7F'
+,'ML82KAB7PBSN2'
+,'MLAG1F2ETCKCE'
+,'MLM0WZW7NF9RN'
+,'ML1DHGTH734AH'
+,'F8THWGB1ZA080'
+,'MLQ08D7ETBESY'
+,'5B71C0K7B3RDN'
+,'ML1CBZERHJKS3'
+,'74EA8JBPT6R54'
+,'EJ9YMKYMT83M8'
+,'ML8R5V0R5RQJF'
+,'MLVPZFJ5R5M36'
+,'MLPPYD3DPKNRK'
+,'ZZ5T5G1QFM4JJ'
+,'MLAEKT78A2ZRY'
+,'117QN49N9XRED'
+,'RJE6V8RBCRKNQ'
+,'SQ7M7R99K79ZR'
+,'MLYHAZJT2A1RX'
+,'ML0A77XQ9RTAZ'
+,'ML0QYWPVQ58HC'
+,'MLSN01GZP1KVQ'
+,'MLEFZJAHY4RW8'
+,'0D58R3NDNKPQG'
+,'MLSR3XN0TC0YZ'
+,'MLVQ61TAVVB1S'
+,'ML0PYFA195TA2'
+,'ML0M788DTF9W3'
+,'3NBE39H6Z5WNV'
+,'MLT1EWNP4966S'
+,'MLX81JC8X1RBT'
+,'ML215ETDWVRV2'
+,'MLBQ637Y0JS3K'
+,'ML4Z8G40W619Y'
+,'MLS1K4MG1GZJZ'
+,'1YXXF4KACCC8N'
+,'EYTPS8ME6YTR8'
+,'MLX7G0RNX2TBP'
+,'F3FXGG1JF0JHE'
+,'HZTHJ23NTWDZP'
+,'ML9FA5V2Q2DK8'
+,'MLTJSDMQKJXBF'
+,'1Q7CV29WQKN1C'
+,'MLFD0W475J2WE'
+,'MLDQ9WBQSA6MB'
+,'1QE46PJD5D65D'
+,'MLG66THM9BRF9'
+,'MLV8YTVQK7WFG'
+,'ML3HQ9MB9WKYA'
+,'MLZ5CNKGXGM2C'
+,'MLFRZEBRD25QV'
+,'ML30BFTGYB6ZP'
+,'MLT64CF6EBHMY'
+,'MLHZFVTZ1X8NC'
+,'MLYN9K9YE38NX'
+,'MLZ181RYX3957'
+,'MLZRQPYJWDMK9'
+,'MLVEN0N53FJWG'
+,'MLYECRPM83CW4'
+,'MLJQ8DKJ32XKE'
+,'MLVAX50CD3AC0'
+,'MLJZ0YEEDE19P'
+,'MLJFQV512Y6VP'
+,'GE8KR3NQCPPBJ'
+,'MLVH8QZ97G6WY'
+,'ML1FHXTZP7FZA'
+,'MLEQQ5HX32MK3'
+,'MLSNJ27NXZSTS'
+,'MLARVQ9ZC85FJ'
+,'CRF1AHCT2PWXW'
+,'DWR7JBSSS80AZ'
+,'MLRVW0PHA5MJB'
+,'ML5ECQ6NDTBCP'
+,'ML5YKPY2ZFNFJ'
+,'MLNAVSN49CM5F'
+,'MLS24EWE6SSCZ'
+,'MLNMDKEQHWH5E'
+,'MLN3TMX4K1R87'
+,'MLHKSBSR1ZES3'
+,'WVW8Y8JSBYHCR'
+,'MLA84G9KZERDV'
+,'ML492VDTVHTXV'
+,'69A2CW0MMNHKM'
+,'MLCYRR4DBKG7Z'
+,'MLGA65WW36XQV'
+,'ML7J65CEAWKRY'
+,'CQC3CDXT740BN'
+,'ML7RMR1PCGVF5'
+,'7XXX69R2CFW7X'
+,'MLPDVJ4BJHG0F'
+,'ML2C4N02FCWS4'
+,'MLMW6ANMBD4BZ'
+,'MLYFPE9EGV9MH'
+,'ML3FBC1ZZRKPW'
+,'VSZ0CPT9P574X'
+,'ZRYAKBV75DRQK'
+,'ML2VBYMFG4EPS'
+,'JQKXV8JP0M8E0'
+,'ML2C4J656RZSB'
+,'MLT2X99F4H22H'
+,'R5X1JH33X06MB'
+,'ML3BENJSB7VRV'
+,'ML79K5VT1RJQ2'
+,'ML68GQ2PQXFAH'
+,'S8GF1HG17ANYN'
+,'MLYERVNJ4ZFCC'
+,'ML6E20C1ZW80W'
+,'ML8H086CSA7WX'
+,'GW3ERS969ZRCM'
+,'1SVKV55WDNQ6K'
+,'ML7HEEZ7B071B'
+,'MLK01ZC4P34FC'
+,'MLMQW0FBK4BCK'
+,'MLS47P69EJA24'
+,'MLCYX90PTNEPX'
+,'WG5Q3V6YYYDA7'
+,'0P6W78299S457'
+,'MLKBDMEGZWPGV'
+,'ML7N41GNJS677'
+,'MLP3T45NYFFRZ'
+,'ML1KE0JFXR80E'
+,'2Y1CQ99KPGF73'
+,'ML0R0QD0T9BDD'
+,'MLJRCZY1V4KM8'
+,'RBKWHVDCFC0EY'
+,'ML4MEAPP92S8A'
+,'1FNEHQH23600W'
+,'DH076WZN9GMTS'
+,'MLVGZX74CJMSV'
+,'ML0W3V5QJC8KG'
+,'MLHXVMS17K59N'
+,'514TP7DPX0AJ1'
+,'ML1QSJSNBTZYZ'
+,'ML892M2DWRBGT'
+,'ML9V115FDJJK3'
+,'MLVYMWRS44FNT'
+,'R7R61PSQEXM8F'
+,'ML2M62P6EK3TH'
+,'RM9FEKNQ9JS86'
+,'KE62EH9SZSZ7J'
+,'MLVFTSKNA8XST'
+,'75Z3WW68RFS85'
+,'X2XV6QNQFAWP9'
+,'ML3BC479GX0F1'
+,'MLC6Y037GDJ24'
+,'MLS0132RDN6PE'
+,'E26P9TVD0JZXT'
+,'8NY0STA4JFZG6'
+,'ML070ZWYV5CY1'
+,'8ZN196HNWTCHX'
+,'MLD9T235AQS70'
+,'MLXXV6RXMMDW1'
+,'5A5WTVWSDK0NP'
+,'MLC8QC57BXNSZ'
+,'ML2C3J2AHF3GJ'
+,'EWWX85D6WJBF8'
+,'MLR2MS6NM7AW0'
+,'MLFY4RPMCE6Z6'
+,'Z8T9JT1265MF8'
+,'7DW0KEFTNC3ZG'
+,'MLQX0BQ3FQ4BY'
+,'MLW2KX71ADGMA'
+,'MLBPD0Q0N9VAP'
+,'QVQ78J8HW4S14'
+,'MLPRA6X4SN5VD'
+,'MLZJ8R1FHK13V'
+,'HZX4H35CGNMDH'
+,'653SQW0TBTR78'
+,'MLEBF5MPSHSVC'
+,'MLP4HZFYBJGX5'
+,'RN7ZVVKWDYYKD'
+,'MLBCGEM61P6YE'
+,'ML7JVB33THKKC'
+,'XBQ1VAGQP94VT'
+,'MLD9AGQBRT04B'
+,'MLKC53JVGDSY7'
+,'MLFDMPY0DT8HD'
+,'ML3C0KTG2549Z'
+,'MLW1JD2KETVSY'
+,'MR3WAKP3AXB41'
+,'ABC79HBPBRQY4'
+,'ML63AKF3SHJ7V'
+,'6WB73GJPXKX61'
+,'MLZYNCR02JPC0'
+,'HZDZR11PVB618'
+,'MLTM3ZD0DXPSS'  --and date_won >= '2018-01-01'
+)
+)
+Select
+t.*
+,Sum(CASE WHEN vfact.report_date >= t.date_won AND vfact.report_date < DATEADD(day,35,t.date_won) then (adjusted_revenue_var_usd - COSTPLUS_ESTIMATED_VAR_USD) end) as AR_35
+,Sum(CASE WHEN vfact.report_date >= t.date_won AND vfact.report_date < DATEADD(day,60,t.date_won) then (adjusted_revenue_var_usd - COSTPLUS_ESTIMATED_VAR_USD) end) as AR_60
+,Sum(CASE WHEN vfact.report_date >= t.date_won AND vfact.report_date < DATEADD(day,91,t.date_won) then (adjusted_revenue_var_usd - COSTPLUS_ESTIMATED_VAR_USD) end) as AR_91
+,Sum(CASE WHEN vfact.report_date >= t.date_won AND vfact.report_date < DATEADD(day,123,t.date_won) then (adjusted_revenue_var_usd - COSTPLUS_ESTIMATED_VAR_USD) end) as AR_123
+,Sum(CASE WHEN vfact.report_date >= t.date_won AND vfact.report_date < DATEADD(day,182,t.date_won) then (adjusted_revenue_var_usd - COSTPLUS_ESTIMATED_VAR_USD) end) as AR_182
+,Sum(CASE WHEN vfact.report_date >= t.date_won AND vfact.report_date < DATEADD(day,273,t.date_won) then (adjusted_revenue_var_usd - COSTPLUS_ESTIMATED_VAR_USD) end) as AR_273
+,Sum(CASE WHEN vfact.report_date >= t.date_won AND vfact.report_date < DATEADD(day,365,t.date_won) then (adjusted_revenue_var_usd - COSTPLUS_ESTIMATED_VAR_USD) end) as sales_NPA
+,Sum(CASE WHEN vfact.report_date >= t.date_won AND vfact.report_date < DATEADD(day,365,t.date_won) and vfact.product_category IN ('Processing') then (adjusted_revenue_var_usd - COSTPLUS_ESTIMATED_VAR_USD) end) as sales_processing_NPA
+,Sum(CASE WHEN vfact.report_date >= t.date_won AND vfact.report_date < DATEADD(day,365,t.date_won) and vfact.product_category IN ('SaaS') then adjusted_revenue_var_usd end) as sales_SaaS_NPA
+,Sum(CASE WHEN vfact.report_date >= t.date_won AND vfact.report_date < DATEADD(day,365,t.date_won) and vfact.product_category IN ('Capital','Square Card','Hardware') then adjusted_revenue_var_usd end) as sales_Fin_Services_NPA
+,Sum(CASE WHEN vfact.report_date >= t.date_won AND vfact.report_date < DATEADD(day,365,t.date_won) and vfact.product_category IN ('Caviar') then adjusted_revenue_var_usd end) as sales_Caviar_NPA
+,Sum(CASE WHEN vfact.report_date >= t.date_won AND vfact.report_date < DATEADD(day,35,t.date_won) then volume_net_var_usd end) as GPV_35
+,Sum(CASE WHEN vfact.report_date >= t.date_won AND vfact.report_date < DATEADD(day,365,t.date_won) then volume_net_var_usd end) as sales_NVA
+,du.ltv_total/100*weighting as ToF_LTV
+,ToF_LTV*scaling_factor as Adj_LTV
+,du.business_category
+,du.state
+From sales_tokens t
+LEFT JOIN app_bi.app_bi_dw.vfact_revenue_summary vfact
+ON t.merchant_token = vfact.merchant_token
+LEFT JOIN app_bi.pentagon.dim_user du
+ON t.merchant_token = du.best_available_merchant_token AND du.is_merchant=1
+GROUP BY 1,2,3,4,5,6,7,8,26,28,29
+HAVING date_won >= '2017-01-01'
+)
